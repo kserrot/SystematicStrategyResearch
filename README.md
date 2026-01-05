@@ -1,6 +1,6 @@
 # Systematic Strategy Research (Crypto)
 
-A recruiter-friendly, reproducible research project that pulls crypto market data, stores it in Postgres,
+Reproducible research project that pulls crypto market data, stores it in Postgres,
 builds features, trains models, and evaluates trading signals/backtests.
 
 ## Tech Stack
