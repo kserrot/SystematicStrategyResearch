@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16
+    container_name: ssrl_db
+    environment:
+      POSTGRES_USER: ssrl
+      POSTGRES_PASSWORD: ssrl_password
+      POSTGRES_DB: ssrl
+    ports:
+      - "5432:5432"
+    volumes:
+      - ssrl_pgdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:4
+    container_name: ssrl_adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  app:
+    build: .
+    container_name: ssrl_app
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ssrl
+      DB_USER: ssrl
+      DB_PASSWORD: ssrl_password
+    command: ["python", "-m", "src.main"]
+
+volumes:
+  ssrl_pgdata:
