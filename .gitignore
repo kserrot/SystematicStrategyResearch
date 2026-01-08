@@ -17,3 +17,8 @@ data/
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+
+# keep folder structure
+!data/
+!data/**/
+!data/**/.gitkeep
