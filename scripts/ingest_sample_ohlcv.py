@@ -1,9 +1,10 @@
 # Load sample bars
 from __future__ import annotations
 
-import os
 import csv
+import os
 from pathlib import Path
+
 import psycopg2
 
 CSV_PATH = Path("data/raw/btcusdt_1h_sample.csv")
@@ -44,7 +45,9 @@ def main() -> None:
             for row in r:
                 cur.execute(
                     """
-                    INSERT INTO ohlcv_bars(instrument_id, timeframe, ts, open, high, low, close, volume, source)
+                    INSERT INTO ohlcv_bars(
+  instrument_id, timeframe, ts, open, high, low, close, volume, source
+)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                     ON CONFLICT (instrument_id, timeframe, ts) DO NOTHING;
                     """,

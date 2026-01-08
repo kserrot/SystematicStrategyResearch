@@ -1,6 +1,8 @@
 \set ON_ERROR_STOP on
 
-INSERT INTO instruments(symbol, exchange, asset_class, base_currency, quote_currency)
+INSERT INTO instruments(
+  symbol, exchange, asset_class, base_currency, quote_currency
+)
 VALUES ('BTCUSDT', 'binance', 'crypto', 'BTC', 'USDT')
 ON CONFLICT (symbol, exchange) DO NOTHING;
 
@@ -21,7 +23,9 @@ CREATE TEMP TABLE staging_ohlcv (
 
 \copy staging_ohlcv(ts,open,high,low,close,volume) FROM '/tmp/btcusdt_1h_sample.csv' WITH (FORMAT csv, HEADER true);
 
-INSERT INTO ohlcv_bars(instrument_id, timeframe, ts, open, high, low, close, volume, source)
+INSERT INTO ohlcv_bars(
+  instrument_id, timeframe, ts, open, high, low, close, volume, source
+)
 SELECT :'instrument_id', '1h', ts, open, high, low, close, volume, 'generated'
 FROM staging_ohlcv
 ON CONFLICT (instrument_id, timeframe, ts) DO NOTHING;

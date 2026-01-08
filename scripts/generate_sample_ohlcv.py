@@ -2,16 +2,16 @@
 from __future__ import annotations
 
 import csv
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
 import random
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
 OUT = Path("data/raw/btcusdt_1h_sample.csv")
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
 
-    start = datetime.now(timezone.utc) - timedelta(days=14)
+    start = datetime.now(UTC) - timedelta(days=14)
     rows = []
     price = 43000.0
 
