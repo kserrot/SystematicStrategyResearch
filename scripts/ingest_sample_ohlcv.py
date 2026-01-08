@@ -13,6 +13,7 @@ SYMBOL = "BTCUSDT"
 EXCHANGE = "binance"
 SOURCE = "generated"
 
+
 def main() -> None:
     db_host = os.getenv("DB_HOST", "localhost")
     db_port = int(os.getenv("DB_PORT", "5432"))
@@ -77,6 +78,7 @@ def main() -> None:
     conn.commit()
     conn.close()
     print(f"Inserted ~{loaded} bars into Postgres.")
+
 
 if __name__ == "__main__":
     main()

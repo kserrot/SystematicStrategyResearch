@@ -8,6 +8,7 @@ from pathlib import Path
 
 OUT = Path("data/raw/btcusdt_1h_sample.csv")
 
+
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
 
@@ -32,6 +33,7 @@ def main() -> None:
         w.writerows(rows)
 
     print(f"Wrote {len(rows)} rows -> {OUT}")
+
 
 if __name__ == "__main__":
     main()
