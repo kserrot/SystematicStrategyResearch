@@ -17,13 +17,21 @@ SOURCE = "generated"
 def main() -> None:
     db_host = os.getenv("DB_HOST", "localhost")
     db_port = int(os.getenv("DB_PORT", "5432"))
-    db_name = os.getenv("DB_NAME", "postgres")
-    db_user = os.getenv("DB_USER", "postgres")
-    db_pass = os.getenv("DB_PASSWORD", "postgres")
+    db_name = os.getenv("DB_NAME", "ssrl")
+    db_user = os.getenv("DB_USER", "ssrl")
+    db_pass = os.getenv("DB_PASSWORD", "ssrl_password")
 
     conn = psycopg2.connect(
-        host=db_host, port=db_port, dbname=db_name, user=db_user, password=db_pass
+        host=db_host,
+        port=db_port,
+        dbname=db_name,
+        user=db_user,
+        password=db_pass,
     )
+
+    if not CSV_PATH.exists():
+        raise FileNotFoundError(f"CSV not found: {CSV_PATH} (run the sample data generation step)")
+
     conn.autocommit = False
 
     with conn.cursor() as cur:
