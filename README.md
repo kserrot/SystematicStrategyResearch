@@ -6,10 +6,11 @@ builds a feature dataset, and evaluates trading signals/backtests.
 > Note: ML/modeling is intentionally deferred until the data + feature pipeline is solid.
 
 ## Tech Stack
-- Python 3.11
+- Python 3.12
 - Postgres (Docker)
 - SQLAlchemy
 - Ruff + Pytest
+- Matplotlib (reporting)
 - GitHub Actions CI
 
 ## Quickstart (Local Dev)
@@ -168,3 +169,54 @@ pytest -q -m "not integration"
 ### 3.10 CI (unit tests)
 GitHub Actions runs Ruff + unit tests on every push/PR via `.github/workflows/ci.yml`.
 Integration tests are marked with `@pytest.mark.integration` and are not run in CI by default.
+
+
+## Step 4: Strategy + Backtest (4.1–4.10)
+Goal: implement a realistic v1 strategy backtest loop (limit orders + brackets), add costs/metrics, walk-forward evaluation, and basic reporting artifacts.
+
+### 4.1 Limit-order fill model
+- Place limit order on the **next bar** after the signal
+- Fill rule: `low <= limit_px <= high`
+- Expire after N bars
+
+### 4.2 Strategy rules (v1)
+- Trend filter (1h): `EMA50 > EMA200`
+- Entry (10m): close crosses above VWAP (optional volume confirmation)
+
+### 4.3 Backtest engine (state machine)
+- `FLAT -> ORDER_PENDING -> IN_POSITION`
+- Deterministic iteration with no lookahead
+
+### 4.4 Exits (brackets)
+- ATR-based stop
+- R-multiple take profit
+- Conservative same-bar ordering: stop first if both touched
+
+### 4.5 Costs + metrics + exports
+- Maker fee + slippage (bps)
+- Writes `data/outputs/trades.csv` and `data/outputs/summary.json`
+
+### 4.6 Walk-forward (A/B/C splits + grid)
+- Select best parameters on train (A) by **total_net_pnl**
+- Evaluate on validate (B) and test (C)
+- Writes `data/outputs/wf_runs.csv` and `data/outputs/wf_best.json`
+
+### 4.7 Reporting
+- Equity curve + drawdown plots
+- Writes `data/outputs/equity.csv`, `equity_curve.png`, `drawdown.png`
+
+### 4.8 No-lookahead tests
+- Next-bar order placement test
+- ATR sourced from fill bar (not future)
+
+### Quickstart (Step 4 smoke runs)
+```bash
+# deterministic smoke backtest + exports
+python scripts/run_backtest_smoke.py
+
+# reporting artifacts (equity + drawdown)
+python scripts/make_report.py
+
+# walk-forward smoke run (A/B/C + grid)
+python scripts/run_walkforward_smoke.py
+```
