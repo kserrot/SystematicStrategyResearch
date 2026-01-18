@@ -24,3 +24,11 @@ data/
 !data/**/.gitkeep
 
 !data/raw/btcusdt_1h_sample.csv
+
+# Build / tooling artifacts
+*.egg-info/
+src/*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.DS_Store
