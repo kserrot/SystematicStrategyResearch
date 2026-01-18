@@ -1,0 +1,37 @@
+{
+  "best_params": {
+    "strategy": {
+      "limit_expiry_bars": 3,
+      "atr_stop_mult": 1.0,
+      "take_profit_r": 1.0,
+      "time_stop_bars": null,
+      "maker_fee_bps": 2.0,
+      "slippage_bps": 1.0
+    },
+    "entry": {
+      "min_vol_ratio": null
+    }
+  },
+  "validate_metrics": {
+    "trades": 6,
+    "win_rate": 1.0,
+    "expectancy": 1.9934000399999998,
+    "profit_factor": null,
+    "mdd": 0.0,
+    "total_net_pnl": 11.960400239999998,
+    "profit_factor_note": "infinite (no losing trades)"
+  },
+  "test_metrics": {
+    "trades": 6,
+    "win_rate": 1.0,
+    "expectancy": 1.9934000399999998,
+    "profit_factor": null,
+    "mdd": 0.0,
+    "total_net_pnl": 11.960400239999998,
+    "profit_factor_note": "infinite (no losing trades)"
+  },
+  "cutoffs": {
+    "a_end_ts": 4260,
+    "b_end_ts": 5700
+  }
+}

@@ -1,13 +1,36 @@
 [tool.ruff]
+# Keep lines short to avoid E501 and make diffs readable.
 line-length = 100
-target-version = "py311"
+
+# Match your installed Python (you upgraded to Python 3.12).
+# Ruff uses this to decide which modern syntax rules are valid.
+target-version = "py312"
+
+# Ignore some files/folders that are not source code.
+extend-exclude = [
+  ".venv",
+  "data/outputs",
+]
+
+
 
 [tool.ruff.lint]
+# Rulesets:
+# - E/F: pycodestyle/pyflakes (errors)
+# - I: import sorting
+# - B: bugbear
+# - UP: pyupgrade
 select = ["E", "F", "I", "B", "UP"]
+
+# Per-file ignores (preferred in newer Ruff versions).
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["E402"]
+
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
 
 [tool.pytest.ini_options]
 markers = [
