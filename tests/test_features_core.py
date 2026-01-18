@@ -13,7 +13,7 @@ from src.features.core import atr, build_features, log_return, rolling_vwap, rsi
 
 def make_df(n=60):
     # simple synthetic OHLCV, increasing close
-    ts = pd.date_range("2026-01-01", periods=n, freq="H", tz="UTC")
+    ts = pd.date_range("2026-01-01", periods=n, freq="h", tz="UTC")
     close = pd.Series(np.linspace(100, 160, n))
     df = pd.DataFrame(
         {
