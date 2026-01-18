@@ -45,7 +45,7 @@ def apply_costs(trade: Trade, params: StrategyParams) -> TradePnL:
 
     if trade.side == Side.LONG:
         entry_eff = entry_raw * (1.0 + slip)  # worse entry
-        exit_eff = exit_raw * (1.0 - slip)    # worse exit
+        exit_eff = exit_raw * (1.0 - slip)  # worse exit
         gross = exit_raw - entry_raw
         net_move = exit_eff - entry_eff
     else:

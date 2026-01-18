@@ -13,6 +13,7 @@ class EntryRuleParams:
       - optional confirmation: vol_ratio >= min_vol_ratio
       - limit price rule: limit_px = vwap_current (simple + stable)
     """
+
     min_vol_ratio: float | None = None
 
 

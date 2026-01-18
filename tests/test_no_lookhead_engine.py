@@ -151,4 +151,3 @@ def test_engine_uses_atr_from_fill_bar_not_future_bar():
             params=params,
             entry_params=EntryRuleParams(min_vol_ratio=None),
         )
-        
