@@ -21,7 +21,7 @@ from src.strategies.v1.spec import StrategyParams
 
 def _first(value):
     """Return first element if value is a list/tuple, otherwise return value."""
-    if isinstance(value, (list, tuple)):
+    if isinstance(value, list | tuple):
         if not value:
             return None
         return value[0]
