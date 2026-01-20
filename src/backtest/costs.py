@@ -33,7 +33,7 @@ def apply_costs(trade: Trade, params: StrategyParams) -> TradePnL:
     """
     Costs model:
       - slippage_bps applied adverse on entry and exit
-      - maker_fee_bps on entry notional; taker_fee_bps on exit notional 
+      - maker_fee_bps on entry notional; taker_fee_bps on exit notional
         for STOP/TAKE_PROFIT/TIME_STOP (else maker)
 
     Assumes qty = 1 unit.
@@ -59,8 +59,7 @@ def apply_costs(trade: Trade, params: StrategyParams) -> TradePnL:
 
     # fees on notional: entry is maker (limit), exit is often taker (stop/TP/time)
     exit_is_taker = any(
-        r in {ReasonCode.STOP, ReasonCode.TAKE_PROFIT, ReasonCode.TIME_STOP}
-        for r in trade.reasons
+        r in {ReasonCode.STOP, ReasonCode.TAKE_PROFIT, ReasonCode.TIME_STOP} for r in trade.reasons
     )
 
     fee_entry = abs(entry_eff) * maker_fee
