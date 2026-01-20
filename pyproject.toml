@@ -2,7 +2,7 @@
 # Keep lines short to avoid E501 and make diffs readable.
 line-length = 100
 
-# Match your installed Python (you upgraded to Python 3.12).
+# Match your installed Python.
 # Ruff uses this to decide which modern syntax rules are valid.
 target-version = "py312"
 
@@ -36,3 +36,4 @@ indent-style = "space"
 markers = [
   "integration: tests that require the docker database",
 ]
+

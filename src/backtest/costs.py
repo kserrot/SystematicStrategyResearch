@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.backtest.types import Trade
-from src.strategies.v1.spec import Side, StrategyParams
+from src.strategies.v1.spec import ReasonCode, Side, StrategyParams
 
 
 @dataclass(frozen=True)
@@ -31,14 +31,16 @@ def _bps_to_rate(bps: float) -> float:
 
 def apply_costs(trade: Trade, params: StrategyParams) -> TradePnL:
     """
-    Costs model (simple + realistic enough for v1):
+    Costs model:
       - slippage_bps applied adverse on entry and exit
-      - maker_fee_bps charged on notional on entry and exit
+      - maker_fee_bps on entry notional; taker_fee_bps on exit notional 
+        for STOP/TAKE_PROFIT/TIME_STOP (else maker)
 
     Assumes qty = 1 unit.
     """
     slip = _bps_to_rate(params.slippage_bps)
     maker_fee = _bps_to_rate(params.maker_fee_bps)
+    taker_fee = _bps_to_rate(params.taker_fee_bps)
 
     entry_raw = float(trade.entry_px)
     exit_raw = float(trade.exit_px)
@@ -55,9 +57,14 @@ def apply_costs(trade: Trade, params: StrategyParams) -> TradePnL:
         gross = entry_raw - exit_raw
         net_move = entry_eff - exit_eff
 
-    # fees on notional both sides
+    # fees on notional: entry is maker (limit), exit is often taker (stop/TP/time)
+    exit_is_taker = any(
+        r in {ReasonCode.STOP, ReasonCode.TAKE_PROFIT, ReasonCode.TIME_STOP}
+        for r in trade.reasons
+    )
+
     fee_entry = abs(entry_eff) * maker_fee
-    fee_exit = abs(exit_eff) * maker_fee
+    fee_exit = abs(exit_eff) * (taker_fee if exit_is_taker else maker_fee)
     fee_cost = fee_entry + fee_exit
 
     # slippage cost is the difference between gross move and move after slippage (before fees)

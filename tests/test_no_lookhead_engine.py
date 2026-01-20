@@ -9,7 +9,7 @@ from src.strategies.v1.spec import StrategyParams
 def test_limit_is_placed_next_bar_not_same_bar():
     """
     If the engine incorrectly places the limit on the SAME bar as the cross,
-    it would fill on that bar. Our engine must place on the NEXT bar, so it
+    it would fill on that bar. Engine must place on the NEXT bar, so it
     should NOT fill here and produce 0 trades.
     """
     df = pd.DataFrame(

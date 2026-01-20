@@ -4,3 +4,4 @@ psycopg2-binary==2.9.10
 numpy
 pandas
 matplotlib
+PyYAML==6.0.3

@@ -1,0 +1,24 @@
+symbols: ["SPY"]
+timeframe:
+  base: "1m"
+  trade: "10m"
+  trend: "1h"
+
+date_range:
+  start: "2024-01-01"
+  end: "2024-06-30"
+
+costs:
+  maker_fee_bps: 0.0
+  taker_fee_bps: 0.0
+  slippage_bps: 0.0
+
+sensitivity:
+  enabled: true
+  multipliers: [1.0, 2.0]
+
+params:
+  limit_expiry_bars: [4]
+  atr_stop_mult: [1.0]
+  take_profit_r: [2.0]
+  time_stop_bars: [null]

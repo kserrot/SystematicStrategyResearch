@@ -220,3 +220,35 @@ python scripts/make_report.py
 # walk-forward smoke run (A/B/C + grid)
 python scripts/run_walkforward_smoke.py
 ```
+
+## Step 5: Costs + Realism Layer (Config-Driven) (5.1–5.4)
+Goal: apply fees + slippage realistically, make costs reproducible via config, and run a quick sensitivity test (e.g., 2× costs).
+
+### 5.1 Cost model
+- Slippage (bps) applied adverse on entry + exit
+- Fees (bps) applied on notional:
+  - Entry: maker fee
+  - Exit: taker fee for STOP / TAKE_PROFIT / TIME_STOP (otherwise maker)
+
+### 5.2 Config file
+Costs and sensitivity settings live in `configs/v1.yaml`:
+- `costs.maker_fee_bps`, `costs.taker_fee_bps`, `costs.slippage_bps`
+- `sensitivity.enabled`, `sensitivity.multipliers`
+
+### 5.3 Run cost sensitivity (1× vs 2×)
+```bash
+# runs with config + writes both default outputs and multiplier-suffixed outputs
+python scripts/run_backtest_smoke.py --config configs/v1.yaml
+
+# reporting artifacts (equity + drawdown) from data/outputs/trades.csv
+python scripts/make_report.py
+```
+
+Expected outputs:
+- `data/outputs/trades.csv`, `data/outputs/summary.json` (first multiplier; keeps other scripts working)
+- `data/outputs/trades_1.0x.csv`, `data/outputs/summary_1.0x.json`
+- `data/outputs/trades_2.0x.csv`, `data/outputs/summary_2.0x.json`
+- `data/outputs/cost_sensitivity.json`
+
+### 5.4 Repo hygiene
+Generated files under `data/outputs/` are ignored via `.gitignore` (folder kept with `data/outputs/.gitkeep`).
