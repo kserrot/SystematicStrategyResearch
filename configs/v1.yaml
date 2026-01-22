@@ -1,12 +1,23 @@
-symbols: ["SPY"]
+symbols: ["BTCUSDT"]
 timeframe:
-  base: "1m"
-  trade: "10m"
+  base: "1h"
+  trade: "1h"
   trend: "1h"
 
 date_range:
-  start: "2024-01-01"
-  end: "2024-06-30"
+  start: "2025-12-25"
+  end: "2026-01-08"
+
+walkforward:
+  mode: "single_split"
+  selection_metric: "total_net_pnl"
+  top_k_from_train: 10
+  single_split:
+    train_start: "2025-12-25"
+    train_end: "2026-01-01"
+    val_end: "2026-01-05"
+    test_end: "2026-01-08"
+  
 
 costs:
   maker_fee_bps: 0.0
@@ -18,7 +29,7 @@ sensitivity:
   multipliers: [1.0, 2.0]
 
 params:
-  limit_expiry_bars: [4]
-  atr_stop_mult: [1.0]
-  take_profit_r: [2.0]
-  time_stop_bars: [null]
+  limit_expiry_bars: [3, 4, 5]
+  atr_stop_mult: [1.0, 1.5, 2.0]
+  take_profit_r: [1.0, 2.0]
+  time_stop_bars: [null, 24]

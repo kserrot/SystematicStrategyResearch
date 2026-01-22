@@ -249,5 +249,58 @@ Expected outputs:
 - `data/outputs/trades_2.0x.csv`, `data/outputs/summary_2.0x.json`
 - `data/outputs/cost_sensitivity.json`
 
+
 ### 5.4 Repo hygiene
 Generated files under `data/outputs/` are ignored via `.gitignore` (folder kept with `data/outputs/.gitkeep`).
+
+## Step 6: Walk-Forward Evaluation (A/B/C) on Real Data (6.1–6.4)
+Goal: run a proper A/B/C walk-forward loop on **real DB data**: optimize on Train (A), select on Validate (B), and report out-of-sample results on Test (C).
+
+### 6.1 Configure A/B/C split
+Walk-forward settings live in `configs/v1.yaml`:
+- `walkforward.single_split.train_start`, `train_end`
+- `walkforward.single_split.val_end`
+- `walkforward.single_split.test_end`
+- `walkforward.selection_metric` (v1: `total_net_pnl`)
+
+Example window (UTC):
+- Train (A): 2025-12-25 → 2026-01-01
+- Validate (B): 2026-01-02 → 2026-01-05
+- Test (C): 2026-01-06 → 2026-01-08
+
+### 6.2 Run Step 6 on real Postgres data
+This script loads BTCUSDT bars + features from Postgres, computes EMA50/EMA200 from close (so the trend filter can run), performs the A/B/C split, runs a parameter sweep, selects the best params on B, then evaluates on C.
+
+```bash
+# ensure DB is running
+docker compose up -d db
+
+# run Step 6 on real DB data
+PYTHONPATH="$(pwd)" python scripts/run_step6_real_db.py --config configs/v1.yaml
+```
+
+Outputs:
+- `data/outputs/step6_real_runs.csv` (train-grid results)
+- `data/outputs/step6_real_best.json` (selected params + validate/test metrics)
+
+### 6.3 Sanity-check bar counts per split
+```bash
+docker compose exec db psql -U ssrl -d ssrl -c "
+with bars as (
+  select b.ts
+  from ohlcv_bars b
+  join instruments i on i.instrument_id=b.instrument_id
+  where i.symbol='BTCUSDT' and b.timeframe='1h'
+)
+select
+  sum(case when ts <= '2026-01-01 23:59:59+00' then 1 else 0 end) as train_bars,
+  sum(case when ts >  '2026-01-01 23:59:59+00' and ts <= '2026-01-05 23:59:59+00' then 1 else 0 end) as val_bars,
+  sum(case when ts >  '2026-01-05 23:59:59+00' then 1 else 0 end) as test_bars
+from bars;"
+```
+
+### 6.4 Tests
+A minimal walk-forward split test ensures A/B/C windows do not overlap:
+```bash
+pytest -q
+```
