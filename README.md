@@ -3,7 +3,6 @@
 Reproducible research project that pulls crypto market data, stores it in Postgres,
 builds a feature dataset, and evaluates trading signals/backtests.
 
-> Note: ML/modeling is intentionally deferred until the data + feature pipeline is solid.
 
 ## Tech Stack
 - Python 3.12
