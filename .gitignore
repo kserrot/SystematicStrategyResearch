@@ -36,3 +36,9 @@ src/*.egg-info/
 # Generated outputs (do not commit)
 data/outputs/*
 !data/outputs/.gitkeep
+
+# Reports (generated)
+reports/runs/
+# Keep a small recruiter-friendly sample:
+!reports/sample/
+!reports/sample/*

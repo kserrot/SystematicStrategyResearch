@@ -59,7 +59,7 @@ def save_report(
 
     # Equity plot
     plt.figure()
-    plt.plot(eq["trade_idx"], eq["equity"])
+    plt.plot(eq["trade_idx"], eq["equity"], marker="o", linewidth=1)
     plt.xlabel("Trade #")
     plt.ylabel("Equity (cum net pnl)")
     plt.title("Equity Curve")
@@ -69,7 +69,8 @@ def save_report(
 
     # Drawdown plot
     plt.figure()
-    plt.plot(eq["trade_idx"], eq["drawdown"])
+    plt.plot(eq["trade_idx"], eq["drawdown"], marker="o", linewidth=1)
+    plt.axhline(0, linewidth=1)
     plt.xlabel("Trade #")
     plt.ylabel("Drawdown")
     plt.title("Drawdown")

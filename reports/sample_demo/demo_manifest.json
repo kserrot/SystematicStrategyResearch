@@ -1,0 +1,13 @@
+{
+  "artifacts": {
+    "drawdown_png": "reports/sample_demo/demo_drawdown.png",
+    "equity_csv": "reports/sample_demo/demo_equity.csv",
+    "equity_png": "reports/sample_demo/demo_equity_curve.png"
+  },
+  "max_drawdown": -5.0,
+  "n_trades": 30,
+  "summary": null,
+  "summary_json": null,
+  "total_net_pnl": 8.0,
+  "trades_csv": "reports/sample_demo/demo_trades.csv"
+}
