@@ -159,7 +159,7 @@ def _extract_trades(result):
     if isinstance(result, list):
         if not result:
             # Ensure stable schema for empty comparisons.
-            return pd.DataFrame(columns=["entry_ts"]) 
+            return pd.DataFrame(columns=["entry_ts"])
 
         first = result[0]
         if hasattr(first, "entry_ts"):
