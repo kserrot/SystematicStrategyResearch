@@ -39,6 +39,6 @@ data/outputs/*
 
 # Reports (generated)
 reports/runs/
-# Keep a small recruiter-friendly sample:
+# Keep a small
 !reports/sample/
 !reports/sample/*

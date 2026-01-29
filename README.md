@@ -219,7 +219,37 @@ Example output (committed):
 
 ![Equity Curve](reports/sample_demo/demo_equity_curve.png)
 
+
 ![Drawdown](reports/sample_demo/demo_drawdown.png)
+
+---
+
+## Step 8: Tests (Indicators + Fill Model + No-Lookahead)
+Goal: add focused unit tests for core indicators and the limit-order fill model, plus a no-lookahead proof via truncation equivalence.
+
+What this delivers:
+- Indicator unit tests (EMA / ATR / rolling VWAP) on tiny deterministic inputs
+- Limit-order fill-model tests (fills, no-fill, expiry, idempotence)
+- No-lookahead test: running the engine on a truncated dataset matches the prefix of a full run
+- Clean unit vs integration split via `@pytest.mark.integration` + `pytest.ini`
+
+Run:
+```bash
+ruff check .
+pytest -q
+
+# unit-only (CI default)
+pytest -q -m "not integration"
+
+# integration-only (requires DB)
+pytest -q -m integration
+```
+
+Added/updated tests:
+- `tests/test_indicators_unit.py`
+- `tests/test_fill_model.py`
+- `tests/test_no_lookahead_truncation.py`
+
 
 ---
 
