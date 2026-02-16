@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 
-class Side(str, Enum):
+class Side(StrEnum):
     LONG = "LONG"
     SHORT = "SHORT"
 
 
-class ReasonCode(str, Enum):
+class ReasonCode(StrEnum):
     TREND_FAIL = "TREND_FAIL"
     ENTRY_CROSS = "ENTRY_CROSS"
     VOL_CONFIRM = "VOL_CONFIRM"
