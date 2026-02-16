@@ -253,6 +253,39 @@ Added/updated tests:
 
 ---
 
+## Step 9: Optional C++ Module (pybind11) — Fast EMA
+Goal: accelerate one performance-critical indicator in C++, keep a safe Python fallback, and verify exact-match behavior with tests.
+
+What this delivers:
+- C++ extension module via pybind11: `_fast_indicators` (compiled at install time)
+- Python wrapper with automatic fallback: `src/fast_indicators.ema()`
+- Unit tests that lock correctness vs a reference implementation
+- CI builds and tests the extension on macOS + Linux (unit tests only)
+
+How it works:
+- The compiled module is named `_fast_indicators` to avoid name collisions with the Python package.
+- The public API lives in `src/fast_indicators/__init__.py` and prefers the C++ path when available.
+
+Run:
+```bash
+# install (builds the extension)
+pip install -e ".[dev]"
+
+# quick check
+python -c "import numpy as np; from src.fast_indicators import ema; print(ema(np.array([1.,2.,3.]), 3))"
+
+# tests
+pytest -q
+```
+
+Key files:
+- `cpp/indicators.cpp` (C++ implementation)
+- `cpp/CMakeLists.txt` (build config)
+- `src/fast_indicators/__init__.py` (fallback wrapper)
+- `tests/test_fast_indicators.py` (correctness tests)
+
+---
+
 ## CI + Developer Workflow
 - Lint: `ruff check .` and `ruff format .`
 - Unit tests: `pytest -q -m "not integration"`

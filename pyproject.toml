@@ -1,3 +1,16 @@
+[project]
+name = "systematicstrategyresearch"
+version = "0.1.0"
+description = "Systematic strategy research platform (Python + SQL + C++)."
+readme = "README.md"
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+  "ruff>=0.5",
+]
+
 [tool.ruff]
 # Keep lines short to avoid E501 and make diffs readable.
 line-length = 100
@@ -11,8 +24,6 @@ extend-exclude = [
   ".venv",
   "data/outputs",
 ]
-
-
 
 [tool.ruff.lint]
 # Rulesets:
@@ -37,3 +48,9 @@ markers = [
   "integration: tests that require the docker database",
 ]
 
+[build-system]
+requires = ["scikit-build-core>=0.9", "pybind11>=2.11"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build]
+cmake.source-dir = "cpp"
