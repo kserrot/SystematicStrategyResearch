@@ -11,10 +11,8 @@ from dotenv import load_dotenv
 
 from src.features.core import atr, build_features, log_return, rolling_vwap, rsi
 
-pytestmark = pytest.mark.integration
 
-
-def make_df(n=60):
+def make_df(n: int = 60) -> pd.DataFrame:
     # simple synthetic OHLCV, increasing close
     ts = pd.date_range("2026-01-01", periods=n, freq="h", tz="UTC")
     close = pd.Series(np.linspace(100, 160, n))
@@ -31,7 +29,7 @@ def make_df(n=60):
     return df
 
 
-def test_log_return_alignment():
+def test_log_return_alignment() -> None:
     close = pd.Series([100.0, 110.0, 121.0])
     r = log_return(close)
     # log(110/100) and log(121/110)
@@ -39,7 +37,7 @@ def test_log_return_alignment():
     assert np.isclose(r.iloc[2], np.log(1.1))
 
 
-def test_rsi_range():
+def test_rsi_range() -> None:
     df = make_df(80)
     out = rsi(df["close"], 14)
     valid = out.dropna()
@@ -47,14 +45,14 @@ def test_rsi_range():
     assert (valid <= 100).all()
 
 
-def test_atr_non_negative():
+def test_atr_non_negative() -> None:
     df = make_df(80)
     out = atr(df["high"], df["low"], df["close"], 14)
     valid = out.dropna()
     assert (valid >= 0).all()
 
 
-def test_rolling_vwap_defined_after_window():
+def test_rolling_vwap_defined_after_window() -> None:
     df = make_df(30)
     v = rolling_vwap(df, 20)
     # first 19 should be NaN, rest should be finite
@@ -62,7 +60,7 @@ def test_rolling_vwap_defined_after_window():
     assert np.isfinite(v.iloc[19:]).all()
 
 
-def test_build_features_columns_exist():
+def test_build_features_columns_exist() -> None:
     df = make_df(60)
     out = build_features(df)
 
@@ -80,7 +78,7 @@ def test_build_features_columns_exist():
         assert c in out.columns
 
 
-def test_no_lookahead_on_sma():
+def test_no_lookahead_on_sma() -> None:
     df = make_df(60)
     out = build_features(df)
 
@@ -92,9 +90,10 @@ def test_no_lookahead_on_sma():
 
 
 @pytest.mark.integration
-def test_e2e_build_features_script_writes_to_db():
+def test_e2e_build_features_script_writes_to_db() -> None:
     """End-to-end smoke test: run the feature builder script and confirm DB has rows."""
     psycopg2 = pytest.importorskip("psycopg2")
+
     # Load .env explicitly (prevents dotenv AssertionError in this execution style)
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     load_dotenv(dotenv_path=os.path.join(repo_root, ".env"))
