@@ -1,14 +1,17 @@
+from __future__ import annotations
+
 import os
 import subprocess
 import sys
 
 import numpy as np
 import pandas as pd
-import psycopg2
 import pytest
 from dotenv import load_dotenv
 
 from src.features.core import atr, build_features, log_return, rolling_vwap, rsi
+
+pytestmark = pytest.mark.integration
 
 
 def make_df(n=60):
@@ -91,6 +94,7 @@ def test_no_lookahead_on_sma():
 @pytest.mark.integration
 def test_e2e_build_features_script_writes_to_db():
     """End-to-end smoke test: run the feature builder script and confirm DB has rows."""
+    psycopg2 = pytest.importorskip("psycopg2")
     # Load .env explicitly (prevents dotenv AssertionError in this execution style)
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     load_dotenv(dotenv_path=os.path.join(repo_root, ".env"))
